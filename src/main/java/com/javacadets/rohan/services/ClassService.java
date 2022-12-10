@@ -54,13 +54,31 @@ public class ClassService {
 
     public Map<String, Object> getClasses(int page, int size) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName() ;
-        List<Classs> classses = this.smeRepository.findClasses(email, PageRequest.of(page-1, size)).getContent();
+//        List<Classs> classses = this.smeRepository.findClasses(email, PageRequest.of(page-1, size)).getContent();
+        List<Classs> classses = this.classRepository.findAll(PageRequest.of(page-1, size))
+                .stream().filter(c-> c.getSme().getEmail().equals(email)).toList();
+
+        System.out.println(classses);
         List<Map<String, Object>> data = mapClasses(classses, List.of("course", "status"));
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("data", data);
         response.put("page", page);
         response.put("size", size);
         return response;
+    }
+
+    public Map<String, Object> getClassesByKey(String key, int page, int size) {
+        List<Map<String, Object>> data = mapClasses(this.classRepository.findAllClassesByKey(key, PageRequest.of(page-1, size)).getContent(), List.of("course", "batch", "quiz_percentage", "quiz_percentage","project_percentage","attendance_percentage","start_date","end_date","status","sme"));
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("data", data);
+        response.put("page", page);
+        response.put("size", size);
+        return response;
+    }
+
+    public Map<String, Object> getClass(String code, int batch) throws ClassNotFoundException {
+        Classs classs = this.classRepository.findByBatchAndCourseCode(batch,code).orElseThrow(()->new ClassNotFoundException());
+        return mapClass(classs,List.of("course", "batch", "quiz_percentage", "quiz_percentage","project_percentage","attendance_percentage","start_date","end_date","status","sme"));
     }
 
     public List<Map<String, Object>> mapClasses(List<Classs> classses, List<String> keys) {
