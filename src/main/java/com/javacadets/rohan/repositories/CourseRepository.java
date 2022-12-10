@@ -12,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
     Optional<Course> findByCode(String code);
+    @Query("select c from Course c where c.status='activated' and c.code=?1")
+    Optional<Course> findByActiveCode(String code);
     @Query("select c from Course c where c.status='activated'")
     Page<Course> findAllActiveCourses(Pageable pageable);
     @Query("select c from Course c where concat(c.code, c.title, c.description) like %?1%")

@@ -59,6 +59,7 @@ public class SecurityConfig {
     public JwtAuthFilter jwtAuthenticationFilter() {
         return new JwtAuthFilter();
     }
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers("/images/**", "/js/**", "/webjars/**");

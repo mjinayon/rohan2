@@ -21,9 +21,9 @@ public class RohanApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		try {
-			Admin admin = new Admin("amalonzo@yondu.com", "andee", "malonzo");
-			System.out.println(admin.getTemporaryPassword());
-			this.userRepository.save(admin);
+//			Admin admin = new Admin("amalonzo@yondu.com", "andee", "malonzo");
+//			System.out.println(admin.getTemporaryPassword());
+//			this.userRepository.save(admin);
 
 //			User user = this.userRepository.findByEmail("amalonzo@yondu.com").orElse(null);
 //			System.out.println(user);

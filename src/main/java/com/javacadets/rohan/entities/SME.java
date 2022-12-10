@@ -3,11 +3,18 @@ package com.javacadets.rohan.entities;
 import com.javacadets.rohan.constants.RohanRoles;
 import com.javacadets.rohan.constants.RohanStatus;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+
+import java.util.Set;
 
 @Entity
 public class SME extends User{
     private String role;
     private String status;
+
+    @OneToMany(mappedBy = "sme", fetch = FetchType.LAZY)
+    Set<Classs> classes;
 
     public SME() {}
 

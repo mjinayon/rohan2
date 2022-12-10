@@ -4,6 +4,7 @@ import com.javacadets.rohan.constants.RohanStatus;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Course {
@@ -15,6 +16,9 @@ public class Course {
     private String title;
     private String description;
     private String status;
+
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    private Set<Classs> classes;
 
     public Course() {}
 
@@ -47,6 +51,10 @@ public class Course {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Set<Classs> getClasses() {
+        return classes;
     }
 
     @Override
