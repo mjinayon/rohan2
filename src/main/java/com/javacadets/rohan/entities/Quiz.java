@@ -18,7 +18,7 @@ public class Quiz {
 
     private boolean isDeleted;
 
-    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name="class_id", referencedColumnName = "classId")
     private Classs classs;
 
@@ -61,7 +61,12 @@ public class Quiz {
     }
 
     public boolean isDeleted() {
-        return isDeleted;
+        return this.isDeleted;
+    }
+
+    public Quiz delete() {
+        this.isDeleted = true;
+        return this;
     }
 
     public Set<QuizRecord> getQuizRecords() {

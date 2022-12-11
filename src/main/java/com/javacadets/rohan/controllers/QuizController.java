@@ -17,12 +17,21 @@ public class QuizController {
     @Autowired
     private QuizService quizService;
 
-    @PostMapping(value = "/classes/{code}/{batch}/quizzes")
-    public ResponseEntity<Object> addQuiz(@RequestBody Map<String, Object> request, @PathVariable String code, @PathVariable int batch) {
+    @PostMapping(value = "/quizzes")
+    public ResponseEntity<Object> addQuiz(@RequestBody Map<String, Object> request) {
         try {
-            return new ResponseEntity<>(this.quizService.saveQuiz(request, code, batch), HttpStatus.OK);
+            return new ResponseEntity<>(this.quizService.saveQuiz(request), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Unable to add quiz: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping(value = "/quizzes/{quizId}/delete")
+    public ResponseEntity<Object> deleteQuiz(@PathVariable long quizId) {
+        try {
+            return new ResponseEntity<>(this.quizService.deleteQuiz(quizId), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(String.format("Unable to delete quiz id '%d': %s", quizId, e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -4,6 +4,8 @@ import com.javacadets.rohan.entities.Classs;
 import com.javacadets.rohan.entities.Quiz;
 import com.javacadets.rohan.exceptions.ClassNotFoundException;
 import com.javacadets.rohan.exceptions.InvalidRequestBodyException;
+import com.javacadets.rohan.exceptions.QuizNotFoundException;
+import com.javacadets.rohan.exceptions.QuizRecordNotEmptyException;
 import com.javacadets.rohan.repositories.ClassRepository;
 import com.javacadets.rohan.repositories.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +26,13 @@ public class QuizService {
     @Autowired
     private ClassRepository classRepository;
 
-    public Map<String, Object> saveQuiz(Map<String, Object> request, String code, int batch) throws InvalidRequestBodyException, ClassNotFoundException, ParseException {
+    public Map<String, Object> saveQuiz(Map<String, Object> request) throws InvalidRequestBodyException, ClassNotFoundException, ParseException {
 
-        if (request.get("title") == null || request.get("max_score") == null || request.get("min_score") == null || request.get("date") == null) {
+        if (request.get("code") == null || request.get("batch") == null || request.get("title") == null || request.get("max_score") == null || request.get("min_score") == null || request.get("date") == null) {
             throw new InvalidRequestBodyException(request);
         }
-
+        int batch = (int) request.get("batch");
+        String code = (String) request.get("code");
         String title = (String) request.get("title");
         int maxScore = (int) request.get("max_score");
         int minScore = (int) request.get("min_score");
@@ -37,6 +40,15 @@ public class QuizService {
 
         Classs classs = this.classRepository.findByBatchAndCourseCode(batch, code).orElseThrow(() -> new ClassNotFoundException(code, batch));
         Quiz quiz = this.quizRepository.save(new Quiz(title, minScore, maxScore, date, classs));
+        return mapQuiz(quiz);
+    }
+
+    public Map<String, Object> deleteQuiz(long quizId) throws QuizNotFoundException, QuizRecordNotEmptyException {
+        Quiz quiz = this.quizRepository.findById(quizId).orElseThrow(() -> new QuizNotFoundException(quizId));
+        if (!quiz.getQuizRecords().isEmpty()) {
+            throw new QuizRecordNotEmptyException(quizId);
+        }
+        quiz = this.quizRepository.save(quiz.delete());
         return mapQuiz(quiz);
     }
 

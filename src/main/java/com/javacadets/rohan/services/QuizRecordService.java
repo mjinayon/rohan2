@@ -5,6 +5,7 @@ import com.javacadets.rohan.entities.QuizRecord;
 import com.javacadets.rohan.entities.Student;
 import com.javacadets.rohan.entities.User;
 import com.javacadets.rohan.exceptions.InvalidRequestBodyException;
+import com.javacadets.rohan.exceptions.InvalidScoreRangeException;
 import com.javacadets.rohan.exceptions.QuizNotFoundException;
 import com.javacadets.rohan.exceptions.UserNotFoundException;
 import com.javacadets.rohan.repositories.QuizRecordRepository;
@@ -25,9 +26,15 @@ public class QuizRecordService {
     @Autowired
     private QuizRepository quizRepository;
 
-    public Map<String, Object> saveQuizRecord(long quizId, String email, int score) throws InvalidRequestBodyException, QuizNotFoundException {
+    public Map<String, Object> saveQuizRecord(long quizId, String email, int score) throws QuizNotFoundException, InvalidScoreRangeException {
         Student student = this.studentRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
         Quiz quiz = this.quizRepository.findById(quizId).orElseThrow(() -> new QuizNotFoundException(quizId));
+        if (quiz.isDeleted()) {
+           throw  new QuizNotFoundException(quizId);
+        }
+        if (score < quiz.getMinScore() || score > quiz.getMaxScore()) {
+            throw new InvalidScoreRangeException(quiz.getMinScore(), quiz.getMaxScore(), score);
+        }
         QuizRecord quizRecord = this.quizRecordRepository.save(new QuizRecord(student, quiz, score));
         return mapQuizRecord(quizRecord);
     }
