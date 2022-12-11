@@ -14,8 +14,19 @@ public class Admin extends User{
         this.role = RohanRoles.ADMIN;
     }
 
+    @Override
     public String getRole() {
         return role;
+    }
+
+    @Override
+    public String getStatus() {
+        return null;
+    }
+
+    @Override
+    public void setStatus(String status) {
+
     }
 
     @Override

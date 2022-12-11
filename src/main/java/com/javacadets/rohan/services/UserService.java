@@ -56,19 +56,11 @@ public class UserService {
 
     public Map<String, Object> updateUserStatus(String email) {
         User user = this.userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
-        if (user instanceof Student student) {
-            if (student.getStatus().equals(RohanStatus.DEACTIVATED)) {
-                throw new UserNotFoundException(email);
-            }
-            student.setStatus(RohanStatus.DEACTIVATED);
-        } else if (user instanceof SME sme) {
-            if (sme.getStatus().equals(RohanStatus.DEACTIVATED)) {
-                throw new UserNotFoundException(email);
-            }
-            sme.setStatus(RohanStatus.DEACTIVATED);
-        } else {
+        if (user.getStatus().equals(RohanStatus.DEACTIVATED)) {
             throw new UserNotFoundException(email);
         }
+
+        user.setStatus(RohanStatus.DEACTIVATED);
         user = this.userRepository.save(user);
         return mapUser(user, List.of("email", "first_name", "last_name", "role", "status"));
     }
@@ -96,7 +88,7 @@ public class UserService {
         return mapUser(user, List.of("email", "first_name", "last_name", "role", "status"));
     }
 
-    public static List<Map<String, Object>> mapUsers(List<User> users, List<String> keys) {
+    public static List<Map<String, Object>> mapUsers(List<? extends User> users, List<String> keys) {
         List<Map<String, Object>> mUsers = new ArrayList<>();
         for (User user: users) {
             mUsers.add(mapUser(user, keys));
@@ -116,10 +108,10 @@ public class UserService {
             mUser.put("last_name", user.getLastName());
         }
         if (keys.contains("role")) {
-            mUser.put("role", user instanceof SME ? RohanRoles.SME: RohanRoles.STUDENT);
+            mUser.put("role", user.getRole());
         }
         if (keys.contains("status")) {
-            mUser.put("status", user instanceof SME sme ? sme.getStatus(): ((Student) user).getStatus());
+            mUser.put("status", user.getStatus());
         }
         if (keys.contains("password")) {
             mUser.put("password", user.getPassword());

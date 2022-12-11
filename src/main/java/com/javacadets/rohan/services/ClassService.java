@@ -54,11 +54,8 @@ public class ClassService {
 
     public Map<String, Object> getClasses(int page, int size) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName() ;
-//        List<Classs> classses = this.smeRepository.findClasses(email, PageRequest.of(page-1, size)).getContent();
-        List<Classs> classses = this.classRepository.findAll(PageRequest.of(page-1, size))
-                .stream().filter(c-> c.getSme().getEmail().equals(email)).toList();
-
-        System.out.println(classses);
+        SME sme = this.smeRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+        List<Classs> classses = this.classRepository.findAllBySme(sme, PageRequest.of(page-1, size)).getContent();
         List<Map<String, Object>> data = mapClasses(classses, List.of("course", "status"));
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("data", data);
@@ -108,7 +105,7 @@ public class ClassService {
             mClass.put("sme", UserService.mapUser(classs.getSme(), List.of("email", "first_name", "last_name", "role", "status")));
         }
         if (keys.contains("students")) {
-            mClass.put("students", UserService.mapUsers(classs.getStudents().stream().map((student -> (User) student)).toList(), List.of("email", "first_name", "last_name", "role", "status")));
+            mClass.put("students", UserService.mapUsers(classs.getStudents().stream().toList(), List.of("email", "first_name", "last_name", "role", "status")));
         }
         return mClass;
     }

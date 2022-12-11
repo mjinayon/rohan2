@@ -24,14 +24,17 @@ public class Student extends User {
         this.status = RohanStatus.ACTIVATED;
     }
 
+    @Override
     public String getRole() {
-        return role;
+        return this.role;
     }
 
+    @Override
     public String getStatus() {
-        return status;
+        return this.status;
     }
 
+    @Override
     public void setStatus(String status) {
         this.status = status;
     }

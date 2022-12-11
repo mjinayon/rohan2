@@ -24,14 +24,17 @@ public class SME extends User{
         this.status = RohanStatus.ACTIVATED;
     }
 
+    @Override
     public String getRole() {
         return role;
     }
 
+    @Override
     public String getStatus() {
         return status;
     }
 
+    @Override
     public void setStatus(String status) {
         this.status = status;
     }

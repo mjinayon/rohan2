@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class User {
+public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
@@ -31,6 +31,11 @@ public class User {
         this.temporaryPassword = PasswordGenerator.generatePassword(PasswordGenerator.DEFAULT_PASS_LENGTH);
         this.password = new BCryptPasswordEncoder().encode(this.temporaryPassword);
     }
+
+    public abstract String getRole();
+    public abstract String getStatus();
+
+    public abstract void setStatus(String status);
 
     public long getUserId() {
         return userId;
