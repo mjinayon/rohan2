@@ -2,9 +2,7 @@ package com.javacadets.rohan.entities;
 
 import com.javacadets.rohan.constants.RohanRoles;
 import com.javacadets.rohan.constants.RohanStatus;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import jakarta.persistence.OneToMany;
 
 import java.util.Set;
@@ -19,6 +17,12 @@ public class Student extends User {
 
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private Set<QuizRecord> quizRecords;
+
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    private Set<ExerciseRecord> exerciseRecords;
+
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    private Set<ProjectRecord> projectRecords;
 
     public Student() {}
 

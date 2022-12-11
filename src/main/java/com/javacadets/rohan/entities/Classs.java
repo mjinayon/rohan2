@@ -37,6 +37,12 @@ public class Classs {
     @OneToMany(mappedBy = "classs", fetch = FetchType.LAZY)
     private Set<Quiz> quizzes;
 
+    @OneToMany(mappedBy = "classs", fetch = FetchType.LAZY)
+    private Set<Exercise> exercises;
+
+    @OneToOne(mappedBy = "classs", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private Project project;
+
     public Classs() {}
 
     public Classs(Course course, double quizPercentage, double exercisePercentage, double projectPercentage, double attendancePercentage, Date startDate, Date endDate, SME sme) {
@@ -54,6 +60,8 @@ public class Classs {
             this.batch = course.getClasses().size()+1;
         }
         this.status = RohanStatus.ACTIVATED;
+
+        this.project = new Project(this);
     }
 
     public long getClassId() {
