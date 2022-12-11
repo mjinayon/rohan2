@@ -113,6 +113,10 @@ public class Classs {
         return Objects.hash(classId, batch, course);
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Classs{" +
