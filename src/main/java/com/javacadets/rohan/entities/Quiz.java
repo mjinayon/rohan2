@@ -16,6 +16,8 @@ public class Quiz {
     private int minScore;
     private Date date;
 
+    private boolean isDeleted;
+
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name="class_id", referencedColumnName = "classId")
     private Classs classs;
@@ -31,6 +33,7 @@ public class Quiz {
         this.maxScore = maxScore;
         this.classs = classs;
         this.date = date;
+        this.isDeleted = false;
     }
 
     public long getQuizId() {
@@ -57,26 +60,12 @@ public class Quiz {
         return date;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Quiz quiz)) return false;
-        return quizId == quiz.quizId && classs.equals(quiz.classs);
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(quizId, classs);
+    public Set<QuizRecord> getQuizRecords() {
+        return quizRecords;
     }
 
-    @Override
-    public String toString() {
-        return "Quiz{" +
-                "quizId=" + quizId +
-                ", title='" + title + '\'' +
-                ", maxScore=" + maxScore +
-                ", minScore=" + minScore +
-                ", classs=" + classs +
-                '}';
-    }
 }

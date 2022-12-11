@@ -120,21 +120,9 @@ public class Classs {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "Classs{" +
-                "classId=" + classId +
-                ", quizPercentage=" + quizPercentage +
-                ", exercisePercentage=" + exercisePercentage +
-                ", projectPercentage=" + projectPercentage +
-                ", attendancePercentage=" + attendancePercentage +
-                ", batch=" + batch +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", status='" + status + '\'' +
-                ", course=" + course +
-                ", sme=" + sme +
-                ", students=" + students +
-                '}';
+    public Set<Quiz> getQuizzes() {
+        return quizzes;
     }
+
+
 }

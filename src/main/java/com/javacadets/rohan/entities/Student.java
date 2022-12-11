@@ -39,11 +39,14 @@ public class Student extends User {
 
     @Override
     public void setStatus(String status) {
-        this.status = status;
+
     }
 
-    @Override
-    public String toString() {
-        return "ID: " + this.getUserId();
+    public Set<Classs> getClasses() {
+        return classes;
+    }
+
+    public Set<QuizRecord> getQuizRecords() {
+        return quizRecords;
     }
 }

@@ -56,27 +56,4 @@ public class Course {
     public Set<Classs> getClasses() {
         return classes;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Course course)) return false;
-        return courseId == course.courseId && code.equals(course.code);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(courseId, code);
-    }
-
-    @Override
-    public String toString() {
-        return "Course{" +
-                "courseId=" + courseId +
-                ", code='" + code + '\'' +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
-                '}';
-    }
 }

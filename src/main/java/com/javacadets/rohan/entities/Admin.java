@@ -27,9 +27,4 @@ public class Admin extends User{
     public void setStatus(String status) {
 
     }
-
-    @Override
-    public String toString() {
-        return "ID: " + this.getUserId();
-    }
 }

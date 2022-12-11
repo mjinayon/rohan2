@@ -38,8 +38,7 @@ public class SME extends User{
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "ID: " + this.getUserId();
+    public Set<Classs> getClasses() {
+        return classes;
     }
 }

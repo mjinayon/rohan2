@@ -61,15 +61,5 @@ public abstract class User {
         return this.temporaryPassword;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User user)) return false;
-        return userId == user.userId && email.equals(user.email);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(userId, email);
-    }
 }
