@@ -34,6 +34,9 @@ public class Classs {
     @JoinTable(name = "course_class_enroll",joinColumns = @JoinColumn(name="class_id", referencedColumnName = "classId"), inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "userId"))
     private Set<Student> students;
 
+    @OneToMany(mappedBy = "classs", fetch = FetchType.LAZY)
+    private Set<Quiz> quizzes;
+
     public Classs() {}
 
     public Classs(Course course, double quizPercentage, double exercisePercentage, double projectPercentage, double attendancePercentage, Date startDate, Date endDate, SME sme) {

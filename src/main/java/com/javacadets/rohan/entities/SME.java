@@ -10,17 +10,16 @@ import java.util.Set;
 
 @Entity
 public class SME extends User{
-    private String role;
+    private final String role  = RohanRoles.SME;
     private String status;
 
     @OneToMany(mappedBy = "sme", fetch = FetchType.LAZY)
-    Set<Classs> classes;
+    private Set<Classs> classes;
 
     public SME() {}
 
     public SME(String email, String firstName, String lastName) {
         super(email, firstName, lastName);
-        this.role = RohanRoles.SME;
         this.status = RohanStatus.ACTIVATED;
     }
 

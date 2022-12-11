@@ -33,7 +33,7 @@ public class ClassService {
     public Map<String, Object> saveClass(Map<String, Object> request) throws InvalidGradingPercentageException, InvalidEndDateException, CourseNotFoundException, ParseException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         SME sme = this.smeRepository.findByEmail(auth.getName()).orElseThrow(() -> new UserNotFoundException(auth.getName()));
-        Course course = this.courseRepository.findByActiveCode((String) request.get("course_code")).orElseThrow(() -> new CourseNotFoundException((String) request.get("course_code")));
+        Course course = this.courseRepository.findActiveCourseByCode((String) request.get("course_code")).orElseThrow(() -> new CourseNotFoundException((String) request.get("course_code")));
 
         double sumPercentage = ((double)request.get("quiz_percentage") + (double)request.get("exercise_percentage") + (double)request.get("project_percentage") + (double)request.get("attendance_percentage"));
         if ( sumPercentage != 100) {
@@ -78,7 +78,7 @@ public class ClassService {
         return mapClass(classs,List.of("course", "batch", "quiz_percentage", "quiz_percentage","project_percentage","attendance_percentage","start_date","end_date","status","sme"));
     }
 
-    public List<Map<String, Object>> mapClasses(List<Classs> classses, List<String> keys) {
+    public static List<Map<String, Object>> mapClasses(List<Classs> classses, List<String> keys) {
         List<Map<String, Object>> data = new ArrayList<>();
         for (Classs classs: classses) {
             data.add(mapClass(classs, keys));

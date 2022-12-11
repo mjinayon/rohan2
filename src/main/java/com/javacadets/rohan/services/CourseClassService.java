@@ -9,29 +9,20 @@ import com.javacadets.rohan.exceptions.DeactivateClassException;
 import com.javacadets.rohan.exceptions.OngoingClassException;
 import com.javacadets.rohan.repositories.ClassRepository;
 import com.javacadets.rohan.repositories.CourseRepository;
-import com.javacadets.rohan.repositories.SMERepository;
-import com.javacadets.rohan.repositories.StudentsRepository;
+import com.javacadets.rohan.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 import java.util.*;
-
-import static com.javacadets.rohan.services.ClassService.mapClass;
-import static com.javacadets.rohan.services.UserService.mapUsers;
 
 @Service
 public class CourseClassService {
     @Autowired
     private ClassRepository classRepository;
     @Autowired
-    private StudentsRepository studentsRepository;
+    private StudentRepository studentsRepository;
     @Autowired
     private CourseRepository courseRepository;
 

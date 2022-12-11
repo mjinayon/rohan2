@@ -5,13 +5,12 @@ import jakarta.persistence.Entity;
 
 @Entity
 public class Admin extends User{
-    private String role;
+    private final String role  = RohanRoles.ADMIN;
 
     public Admin() {}
 
     public Admin(String email, String firstName, String lastName) {
         super(email, firstName, lastName);
-        this.role = RohanRoles.ADMIN;
     }
 
     @Override
