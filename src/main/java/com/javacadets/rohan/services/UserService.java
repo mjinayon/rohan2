@@ -7,9 +7,11 @@ import com.javacadets.rohan.email.EmailService;
 import com.javacadets.rohan.entities.SME;
 import com.javacadets.rohan.entities.Student;
 import com.javacadets.rohan.entities.User;
+import com.javacadets.rohan.exceptions.InvalidEmailFormatException;
 import com.javacadets.rohan.exceptions.InvalidRequestBodyException;
 import com.javacadets.rohan.exceptions.InvalidRoleException;
 import com.javacadets.rohan.exceptions.UserNotFoundException;
+import com.javacadets.rohan.helpers.EmailValidator;
 import com.javacadets.rohan.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -28,10 +30,14 @@ public class UserService {
     @Autowired
     private EmailService emailService;
 
-    public Map<String, Object> saveUser(Map<String, String> request) throws InvalidRoleException, InvalidRequestBodyException {
+    public Map<String, Object> saveUser(Map<String, String> request) throws InvalidRoleException, InvalidRequestBodyException, InvalidEmailFormatException {
 
         if (request.get("email") == null || request.get("first_name") == null || request.get("last_name") == null || request.get("role") == null) {
             throw new InvalidRequestBodyException(request);
+        }
+
+        if (!EmailValidator.validateEmail(request.get("email"))) {
+            throw new InvalidEmailFormatException(request.get("email"));
         }
 
         User user = null;
