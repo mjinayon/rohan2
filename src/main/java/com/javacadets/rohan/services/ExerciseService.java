@@ -1,5 +1,6 @@
 package com.javacadets.rohan.services;
 
+import com.javacadets.rohan.constants.RohanStatus;
 import com.javacadets.rohan.entities.Classs;
 import com.javacadets.rohan.entities.Course;
 import com.javacadets.rohan.entities.Exercise;
@@ -27,7 +28,7 @@ public class ExerciseService {
    @Autowired
     private ClassRepository classRepository;
 
-    public Map<String, Object> saveExercise(Map<String, Object> request) throws InvalidRequestBodyException, ClassNotFoundException, ParseException {
+    public Map<String, Object> saveExercise(Map<String, Object> request) throws InvalidRequestBodyException, ClassNotFoundException, ParseException, DeactivateClassException {
 
         if (request.get("title") == null || request.get("max_score") == null || request.get("min_score") == null || request.get("date") == null) {
             throw new InvalidRequestBodyException(request);
