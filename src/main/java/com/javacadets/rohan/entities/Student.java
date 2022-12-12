@@ -19,6 +19,9 @@ public class Student extends User {
     private Set<QuizRecord> quizRecords;
 
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
+    private Set<AttendanceRecord> attendanceRecord;
+
+    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private Set<ExerciseRecord> exerciseRecords;
 
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)

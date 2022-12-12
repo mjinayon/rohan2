@@ -24,11 +24,11 @@ public class Classs {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "course_id", referencedColumnName = "courseId")
-    Course course;
+    private Course course;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "userId")
-    SME sme;
+    private SME sme;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "course_class_enroll",joinColumns = @JoinColumn(name="class_id", referencedColumnName = "classId"), inverseJoinColumns = @JoinColumn(name = "student_id", referencedColumnName = "userId"))
@@ -36,6 +36,9 @@ public class Classs {
 
     @OneToMany(mappedBy = "classs", fetch = FetchType.LAZY)
     private Set<Quiz> quizzes;
+
+    @OneToMany(mappedBy = "classs", fetch = FetchType.LAZY)
+    private Set<AttendanceRecord> attendanceRecords;
 
     @OneToMany(mappedBy = "classs", fetch = FetchType.LAZY)
     private Set<Exercise> exercises;
