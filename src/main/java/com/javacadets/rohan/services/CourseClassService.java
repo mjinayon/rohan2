@@ -35,11 +35,13 @@ public class CourseClassService {
         if(student.getStatus().equals(RohanStatus.DEACTIVATED)) {
             throw new ClassNotFoundException(code,batch);
         }
+
         if(enroll && !classs.getStudents().add(student)) {
             throw new ClassNotFoundException(code,batch);
         } else if (!enroll && !classs.getStudents().remove(student)) {
             throw new ClassNotFoundException(code,batch);
         }
+
         this.classRepository.save(classs);
         return ClassService.mapClass(classs, List.of("course","status", "sme","students"));
     }

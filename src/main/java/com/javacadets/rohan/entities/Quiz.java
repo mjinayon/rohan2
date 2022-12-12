@@ -3,7 +3,6 @@ package com.javacadets.rohan.entities;
 import jakarta.persistence.*;
 
 import java.util.Date;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity

@@ -19,5 +19,8 @@ public interface ClassRepository extends JpaRepository<Classs, Long> {
 
     Page<Classs> findAllByStudents(Student student, Pageable pageable);
 
+    @Query("select c from Classs c where c.course.code=?1 and c.batch=?2 and c.status='activated'")
+    Optional<Classs> findActiveClass(String code, int batch);
+
     Optional<Classs> findByBatchAndCourseCode(int batch, String code);
 }

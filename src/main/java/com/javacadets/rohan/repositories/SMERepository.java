@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface SMERepository extends JpaRepository<SME, Long> {
+    @Query("select s from SME s where s.email=?1 and s.status='activated'")
     Optional<SME> findByEmail(String email);
 
     @Query("select s.classes from SME s where s.email=?1")

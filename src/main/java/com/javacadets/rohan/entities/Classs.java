@@ -1,11 +1,9 @@
 package com.javacadets.rohan.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.javacadets.rohan.constants.RohanStatus;
 import jakarta.persistence.*;
 
 import java.util.Date;
-import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -43,7 +41,7 @@ public class Classs {
     @OneToMany(mappedBy = "classs", fetch = FetchType.LAZY)
     private Set<Exercise> exercises;
 
-    @OneToOne(mappedBy = "classs", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "classs", cascade = CascadeType.ALL)
     private Project project;
 
     public Classs() {}

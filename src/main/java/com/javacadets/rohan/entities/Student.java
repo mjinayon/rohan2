@@ -56,4 +56,16 @@ public class Student extends User {
     public Set<QuizRecord> getQuizRecords() {
         return quizRecords;
     }
+
+    public Set<AttendanceRecord> getAttendanceRecord() {
+        return attendanceRecord;
+    }
+
+    public Set<ExerciseRecord> getExerciseRecords() {
+        return exerciseRecords;
+    }
+
+    public Set<ProjectRecord> getProjectRecords() {
+        return projectRecords;
+    }
 }

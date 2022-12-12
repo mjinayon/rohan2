@@ -26,7 +26,6 @@ import java.util.Map;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private EmailService emailService;
 
@@ -52,27 +51,26 @@ public class UserService {
 
         User savedUser = this.userRepository.save(user);
 
+        // send email
         new Thread(() -> {
             EmailDetails emailDetails = new EmailDetails(savedUser.getEmail(), "Your temporary password: " + savedUser.getTemporaryPassword(), "Rohan: Generated Temporary Password");
             System.out.println(this.emailService.sendSimpleMail(emailDetails));
             System.out.println(savedUser.getTemporaryPassword());
         }).start();
 
-        return mapUser(savedUser, List.of("email", "first_name", "last_name", "role", "password"));
+        List<String> includeAttr = List.of("email", "first_name", "last_name", "role", "password");
+        return mapUser(savedUser, includeAttr);
     }
 
-    public Map<String, Object> updateUserStatus(String email) {
+    public Map<String, Object> deactivateUserStatus(String email) {
         User user = this.userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
-        if (user.getStatus().equals(RohanStatus.DEACTIVATED)) {
-            throw new UserNotFoundException(email);
-        }
-
         user.setStatus(RohanStatus.DEACTIVATED);
         user = this.userRepository.save(user);
-        return mapUser(user, List.of("email", "first_name", "last_name", "role", "status"));
+        List<String> includeAttr = List.of("email", "first_name", "last_name", "role", "status");
+        return mapUser(user, includeAttr);
     }
 
-    public Map<String, Object> getUsers(String role, int page, int size) {
+    public Map<String, Object> getActiveUsers(String role, int page, int size) {
         List<Map<String, Object>> data = mapUsers(this.userRepository.findAllActiveUsersByRole(role, PageRequest.of(page-1, size)).getContent(), List.of("email", "first_name", "last_name", "role"));
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("data", data);

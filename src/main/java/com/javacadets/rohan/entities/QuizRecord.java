@@ -2,8 +2,6 @@ package com.javacadets.rohan.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Set;
-
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"quiz_id", "user_id"})})
 public class QuizRecord {

@@ -26,16 +26,16 @@ public class UserController {
     @PostMapping(value = "/users/{email}/deactivate")
     public ResponseEntity<Object> deactivateUser(@PathVariable String email) {
         try {
-            return new ResponseEntity<>(this.userService.updateUserStatus(email), HttpStatus.OK);
+            return new ResponseEntity<>(this.userService.deactivateUserStatus(email), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(String.format("Unable to add user: %s", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping(value = "/users")
-    public ResponseEntity<Object> findUsers(@RequestParam(defaultValue = "student") String role, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<Object> findActiveUsers(@RequestParam(defaultValue = "student") String role, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         try {
-            return new ResponseEntity<>(this.userService.getUsers(role, page, size), HttpStatus.OK);
+            return new ResponseEntity<>(this.userService.getActiveUsers(role, page, size), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(String.format("Unable to fetch users: %s", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/users/{email}")
-    public ResponseEntity<Object> findUser(@PathVariable String email)  {
+    public ResponseEntity<Object> findActiveUser(@PathVariable String email)  {
         try {
             return new ResponseEntity<>(this.userService.getUser(email), HttpStatus.OK);
         } catch (Exception e) {

@@ -29,6 +29,7 @@ public class QuizRecordService {
     public Map<String, Object> saveQuizRecord(long quizId, String email, int score) throws QuizNotFoundException, InvalidScoreRangeException {
         Student student = this.studentRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
         Quiz quiz = this.quizRepository.findById(quizId).orElseThrow(() -> new QuizNotFoundException(quizId));
+
         if (quiz.isDeleted()) {
            throw  new QuizNotFoundException(quizId);
         }
