@@ -19,6 +19,8 @@ public class StudentController {
         } catch (Exception e) {
             return new ResponseEntity<>(String.format("Unable to fetch users: %s", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
+
+
     }
 
 }

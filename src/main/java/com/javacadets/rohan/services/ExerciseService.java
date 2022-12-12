@@ -42,7 +42,7 @@ public class ExerciseService {
         Date date = new SimpleDateFormat("yyyy-MM-dd").parse((String) request.get("date"));
 
         Classs classs = this.classRepository.findByBatchAndCourseCode(batch, code).orElseThrow(() -> new ClassNotFoundException(code, batch));
-        Exercise exercise = this.exerciseRepository.save(new Exercise(title, minScore, maxScore, date, classs));
+        Exercise exercise = this.exerciseRepository.save(new Exercise(title, maxScore, minScore, date, classs));
         return mapExercise(exercise);
     }
 

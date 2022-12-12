@@ -31,7 +31,7 @@ public class ExerciseRecordService {
         if (exercise.isDeleted()) {
             throw  new ExerciseNotFoundException(exerciseId);
         }
-        if (!(score < exercise.getMinScore()) || !(score > exercise.getMaxScore())) {
+        if (!(score > exercise.getMinScore()) || !(score < exercise.getMaxScore())) {
             throw new InvalidScoreRangeException(exercise.getMinScore(), exercise.getMaxScore(), score);
         }
         ExerciseRecord exerciseRecord = this.exerciseRecordRepository.save(new ExerciseRecord(student, exercise, score));

@@ -57,7 +57,7 @@ public class Student extends User {
 
     @Override
     public void setStatus(String status) {
-
+    this.status = status;
     }
 
     public Set<Classs> getClasses() {

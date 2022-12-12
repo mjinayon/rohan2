@@ -21,4 +21,12 @@ public class RetrieveClassGradeSheet {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping(value = "/students/{code}/classes/{batch}/my-grades")
+    public ResponseEntity<Object> getGrades(@PathVariable String code, @PathVariable int batch) {
+        try {
+            return new ResponseEntity<>(this.classGradeService.getStudentClassGradeSheet(code, batch), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

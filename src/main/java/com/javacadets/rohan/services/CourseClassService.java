@@ -32,6 +32,7 @@ public class CourseClassService {
         Student student = this.studentsRepository.findByEmail((String)request.get("email")).orElse(null);
         Classs classs = this.classRepository.findByBatchAndCourseCode(batch,code).orElseThrow(()->new ClassNotFoundException(code,batch));
 
+        System.out.println(request.get("email"));
         if(student.getStatus().equals(RohanStatus.DEACTIVATED)) {
             throw new ClassNotFoundException(code,batch);
         }

@@ -9,10 +9,7 @@ import com.javacadets.rohan.email.EmailService;
 import com.javacadets.rohan.entities.SME;
 import com.javacadets.rohan.entities.Student;
 import com.javacadets.rohan.entities.User;
-import com.javacadets.rohan.exceptions.InvalidEmailFormatException;
-import com.javacadets.rohan.exceptions.InvalidRequestBodyException;
-import com.javacadets.rohan.exceptions.InvalidRoleException;
-import com.javacadets.rohan.exceptions.UserNotFoundException;
+import com.javacadets.rohan.exceptions.*;
 import com.javacadets.rohan.helpers.EmailValidator;
 import com.javacadets.rohan.helpers.ResponseMapper;
 import com.javacadets.rohan.repositories.UserRepository;
@@ -38,9 +35,9 @@ public class UserService {
             throw new InvalidRequestBodyException(request);
         }
 
-//        if (!EmailValidator.validateEmail(request.get("email"))) {
-//            throw new InvalidEmailFormatException(request.get("email"));
-//        }
+        if (!EmailValidator.validateEmail(request.get("email"))) {
+           throw new InvalidEmailFormatException(request.get("email"));
+        }
 
         User user = null;
 
@@ -58,7 +55,7 @@ public class UserService {
         new Thread(() -> {
             EmailDetails emailDetails = new EmailDetails(savedUser.getEmail(), "Your temporary password: " + savedUser.getTemporaryPassword(), "Rohan: Generated Temporary Password");
             System.out.println(this.emailService.sendSimpleMail(emailDetails));
-            System.out.println(savedUser.getTemporaryPassword());
+            System.out.println(savedUser.getEmail() +" - " +savedUser.getTemporaryPassword());
         }).start();
 
         Map<String, String[]> filterSet = new LinkedHashMap<>();
@@ -66,8 +63,12 @@ public class UserService {
         return ResponseMapper.mapObject(savedUser, filterSet);
     }
 
-    public Map<String, Object> deactivateUserStatus(String email) {
+    public Map<String, Object> deactivateUserStatus(String email) throws DeactivatedUserException {
         User user = this.userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+
+        if(user.getStatus().equals(RohanStatus.DEACTIVATED)) {
+            throw new DeactivatedUserException(email);
+        }
         user.setStatus(RohanStatus.DEACTIVATED);
         user = this.userRepository.save(user);
         List<String> includeAttr = List.of("email", "first_name", "last_name", "role", "status");

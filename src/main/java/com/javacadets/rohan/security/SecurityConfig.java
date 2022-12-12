@@ -39,6 +39,8 @@ public class SecurityConfig {
                 .requestMatchers("/classes/**").hasAuthority("sme")
                 .requestMatchers("/quizzes/**").hasAuthority("sme")
                 .requestMatchers("/exercises/**").hasAuthority("sme")
+                .requestMatchers("/students/**").hasAuthority("student")
+                .requestMatchers("/my-classes/**").hasAuthority("student")
                 .requestMatchers("/courses/**").hasAnyAuthority("sme", "admin")
                 .anyRequest().authenticated()
                 .and()

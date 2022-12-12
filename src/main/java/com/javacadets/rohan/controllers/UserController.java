@@ -28,7 +28,7 @@ public class UserController {
         try {
             return new ResponseEntity<>(this.userService.deactivateUserStatus(email), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(String.format("Unable to add user: %s", e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(String.format("Unable deactivate user: %s", e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 
