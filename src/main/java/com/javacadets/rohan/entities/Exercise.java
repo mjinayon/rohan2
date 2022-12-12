@@ -71,16 +71,4 @@ public class Exercise {
         this.isDeleted = true;
         return this;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Exercise exercise)) return false;
-        return exerciseId == exercise.exerciseId && classs.equals(exercise.classs);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(exerciseId, classs);
-    }
 }

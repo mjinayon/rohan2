@@ -54,11 +54,7 @@ public class Classs {
         this.endDate = endDate;
         this.course = course;
         this.sme = sme;
-        if(course.getClasses().isEmpty()) {
-            this.batch = 1;
-        } else {
-            this.batch = course.getClasses().size()+1;
-        }
+        this.batch = course.getClasses().size()+1;
         this.status = RohanStatus.ACTIVATED;
 
         this.project = new Project(this);
@@ -110,18 +106,6 @@ public class Classs {
 
     public Set<Student> getStudents() {
         return students;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Classs classs)) return false;
-        return classId == classs.classId && batch == classs.batch && course.equals(classs.course);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(classId, batch, course);
     }
 
     public void setStatus(String status) {
