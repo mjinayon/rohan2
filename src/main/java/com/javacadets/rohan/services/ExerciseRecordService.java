@@ -1,10 +1,7 @@
 package com.javacadets.rohan.services;
 
 import com.javacadets.rohan.entities.*;
-import com.javacadets.rohan.exceptions.ExerciseNotFoundException;
-import com.javacadets.rohan.exceptions.InvalidScoreRangeException;
-import com.javacadets.rohan.exceptions.QuizNotFoundException;
-import com.javacadets.rohan.exceptions.UserNotFoundException;
+import com.javacadets.rohan.exceptions.*;
 import com.javacadets.rohan.repositories.ExerciseRecordRepository;
 import com.javacadets.rohan.repositories.ExerciseRepository;
 import com.javacadets.rohan.repositories.StudentRepository;
@@ -23,9 +20,13 @@ public class ExerciseRecordService {
     @Autowired
     private ExerciseRepository exerciseRepository;
 
-    public Map<String, Object> saveExerciseRecord(long exerciseId, String email, int score) throws ExerciseNotFoundException, InvalidScoreRangeException {
+    public Map<String, Object> saveExerciseRecord(long exerciseId, String email, int score) throws ExerciseNotFoundException, InvalidScoreRangeException, StudentNotEnrolledException {
         Student student = this.studentRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
         Exercise exercise = this.exerciseRepository.findById(exerciseId).orElseThrow(() -> new ExerciseNotFoundException(exerciseId));
+
+        if (!exercise.getClasss().getStudents().contains(student)) {
+            throw new StudentNotEnrolledException(student);
+        }
 
         if (exercise.isDeleted()) {
             throw  new ExerciseNotFoundException(exerciseId);

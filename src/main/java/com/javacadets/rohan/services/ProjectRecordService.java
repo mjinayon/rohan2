@@ -1,10 +1,8 @@
 package com.javacadets.rohan.services;
 
 import com.javacadets.rohan.entities.*;
+import com.javacadets.rohan.exceptions.*;
 import com.javacadets.rohan.exceptions.ClassNotFoundException;
-import com.javacadets.rohan.exceptions.ProjectNotFoundException;
-import com.javacadets.rohan.exceptions.QuizNotFoundException;
-import com.javacadets.rohan.exceptions.UserNotFoundException;
 import com.javacadets.rohan.repositories.ClassRepository;
 import com.javacadets.rohan.repositories.ProjectRecordRepository;
 import com.javacadets.rohan.repositories.ProjectRepository;
@@ -27,10 +25,13 @@ public class ProjectRecordService {
     @Autowired
     private ClassRepository classRepository;
 
-    public Map<String, Object> saveProjectRecord(String code, int batch, String email, int score) throws ProjectNotFoundException, ClassNotFoundException {
+    public Map<String, Object> saveProjectRecord(String code, int batch, String email, int score) throws ProjectNotFoundException, ClassNotFoundException, StudentNotEnrolledException {
         Student student = this.studentRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
         Classs classs = this.classRepository.findByBatchAndCourseCode(batch,code).orElseThrow(()->new ClassNotFoundException(code,batch));
         Project project = this.projectRepository.findByClasss(classs).orElse(null);
+        if (!project.getClasss().getStudents().contains(student)) {
+            throw new StudentNotEnrolledException(student);
+        }
         ProjectRecord projectRecord = this.projectRecordRepository.save(new ProjectRecord(student, project, score));
         return mapProjectRecord(projectRecord);
     }

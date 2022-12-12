@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query("select u from User u where u.email=?1 and u.status='activated'")
+    //@Query("select u from User u where u.email=?1 and u.status='activated'")
     Optional<User> findByEmail(String email);
     @Query("select u from User u where u.role=?1 and u.status='activated'")
     Page<User> findAllActiveUsersByRole(String role, Pageable pageable);

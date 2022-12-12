@@ -1,5 +1,6 @@
 package com.javacadets.rohan.entities;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.javacadets.rohan.constants.RohanRoles;
 import com.javacadets.rohan.constants.RohanStatus;
 import jakarta.persistence.Entity;
@@ -9,6 +10,7 @@ import jakarta.persistence.OneToMany;
 import java.util.Set;
 
 @Entity
+@JsonFilter("filter_sme")
 public class SME extends User{
     private final String role  = RohanRoles.SME;
     private String status;

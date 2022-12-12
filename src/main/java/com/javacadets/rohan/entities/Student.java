@@ -1,5 +1,7 @@
 package com.javacadets.rohan.entities;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.javacadets.rohan.constants.RohanRoles;
 import com.javacadets.rohan.constants.RohanStatus;
 import jakarta.persistence.*;
@@ -8,22 +10,31 @@ import jakarta.persistence.OneToMany;
 import java.util.Set;
 
 @Entity
+@JsonFilter("filter_student")
 public class Student extends User {
+    @JsonProperty(value = "role")
     private final String role  = RohanRoles.STUDENT;
+
+    @JsonProperty(value = "status")
     private String status;
 
+    @JsonProperty(value = "classes")
     @ManyToMany(mappedBy = "students", fetch = FetchType.LAZY)
     private Set<Classs> classes;
 
+    @JsonProperty(value = "quiz_records")
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private Set<QuizRecord> quizRecords;
 
+    @JsonProperty(value = "attendance_records")
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private Set<AttendanceRecord> attendanceRecord;
 
+    @JsonProperty(value = "exercise_records")
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private Set<ExerciseRecord> exerciseRecords;
 
+    @JsonProperty(value = "project_records")
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY)
     private Set<ProjectRecord> projectRecords;
 

@@ -58,7 +58,7 @@ public class Classs {
         this.batch = course.getClasses().size()+1;
         this.status = RohanStatus.ACTIVATED;
 
-        this.project = new Project(this);
+        this.project = new Project(this, String.format("Project for %s-%d", this.course.getCode(), this.batch), 100, 75);
     }
 
     public long getClassId() {

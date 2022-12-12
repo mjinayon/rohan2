@@ -4,10 +4,7 @@ import com.javacadets.rohan.entities.Quiz;
 import com.javacadets.rohan.entities.QuizRecord;
 import com.javacadets.rohan.entities.Student;
 import com.javacadets.rohan.entities.User;
-import com.javacadets.rohan.exceptions.InvalidRequestBodyException;
-import com.javacadets.rohan.exceptions.InvalidScoreRangeException;
-import com.javacadets.rohan.exceptions.QuizNotFoundException;
-import com.javacadets.rohan.exceptions.UserNotFoundException;
+import com.javacadets.rohan.exceptions.*;
 import com.javacadets.rohan.repositories.QuizRecordRepository;
 import com.javacadets.rohan.repositories.QuizRepository;
 import com.javacadets.rohan.repositories.StudentRepository;
@@ -26,9 +23,13 @@ public class QuizRecordService {
     @Autowired
     private QuizRepository quizRepository;
 
-    public Map<String, Object> saveQuizRecord(long quizId, String email, int score) throws QuizNotFoundException, InvalidScoreRangeException {
+    public Map<String, Object> saveQuizRecord(long quizId, String email, int score) throws QuizNotFoundException, InvalidScoreRangeException, StudentNotEnrolledException {
         Student student = this.studentRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
         Quiz quiz = this.quizRepository.findById(quizId).orElseThrow(() -> new QuizNotFoundException(quizId));
+
+        if (!quiz.getClasss().getStudents().contains(student)) {
+            throw new StudentNotEnrolledException(student);
+        }
 
         if (quiz.isDeleted()) {
            throw  new QuizNotFoundException(quizId);

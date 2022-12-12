@@ -10,6 +10,7 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long projectId;
+    private String title;
     private int maxScore;
     private int minScore;
 
@@ -23,9 +24,10 @@ public class Project {
 
     public Project() {}
 
-    public Project(Classs classs) {
-        this.maxScore = 100;
-        this.minScore = 0;
+    public Project(Classs classs, String title, int maxScore, int minScore) {
+        this.title = title;
+        this.maxScore = maxScore;
+        this.minScore = minScore;
 
         this.classs = classs;
     }

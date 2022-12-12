@@ -1,5 +1,7 @@
 package com.javacadets.rohan.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.javacadets.rohan.constants.RohanRoles;
 import com.javacadets.rohan.constants.RohanStatus;
 import com.javacadets.rohan.email.EmailDetails;
@@ -12,6 +14,7 @@ import com.javacadets.rohan.exceptions.InvalidRequestBodyException;
 import com.javacadets.rohan.exceptions.InvalidRoleException;
 import com.javacadets.rohan.exceptions.UserNotFoundException;
 import com.javacadets.rohan.helpers.EmailValidator;
+import com.javacadets.rohan.helpers.ResponseMapper;
 import com.javacadets.rohan.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -29,7 +32,7 @@ public class UserService {
     @Autowired
     private EmailService emailService;
 
-    public Map<String, Object> saveUser(Map<String, String> request) throws InvalidRoleException, InvalidRequestBodyException, InvalidEmailFormatException {
+    public JsonNode saveUser(Map<String, String> request) throws InvalidRoleException, InvalidRequestBodyException, InvalidEmailFormatException, JsonProcessingException {
 
         if (request.get("email") == null || request.get("first_name") == null || request.get("last_name") == null || request.get("role") == null) {
             throw new InvalidRequestBodyException(request);
@@ -58,8 +61,9 @@ public class UserService {
             System.out.println(savedUser.getTemporaryPassword());
         }).start();
 
-        List<String> includeAttr = List.of("email", "first_name", "last_name", "role", "password");
-        return mapUser(savedUser, includeAttr);
+        Map<String, String[]> filterSet = new LinkedHashMap<>();
+        filterSet.put("filter_user", new String[]{"id", "classes", "quiz_records", "attendance_records", "exercise_records", "project_records", "temporary_password"});
+        return ResponseMapper.mapObject(savedUser, filterSet);
     }
 
     public Map<String, Object> deactivateUserStatus(String email) {
@@ -90,7 +94,7 @@ public class UserService {
 
     public Map<String, Object> getUser(String email) {
         User user = this.userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
-        return mapUser(user, List.of("email", "first_name", "last_name", "role", "status"));
+        return mapUser(user, List.of("email", "first_name", "last_name", "role", "status", "temporary_password"));
     }
 
     public static List<Map<String, Object>> mapUsers(List<? extends User> users, List<String> keys) {
