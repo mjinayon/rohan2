@@ -36,9 +36,9 @@ public class UserService {
             throw new InvalidRequestBodyException(request);
         }
 
-        if (!EmailValidator.validateEmail(request.get("email"))) {
-            throw new InvalidEmailFormatException(request.get("email"));
-        }
+//        if (!EmailValidator.validateEmail(request.get("email"))) {
+//            throw new InvalidEmailFormatException(request.get("email"));
+//        }
 
         User user = null;
 
@@ -55,6 +55,7 @@ public class UserService {
         new Thread(() -> {
             EmailDetails emailDetails = new EmailDetails(savedUser.getEmail(), "Your temporary password: " + savedUser.getTemporaryPassword(), "Rohan: Generated Temporary Password");
             System.out.println(this.emailService.sendSimpleMail(emailDetails));
+            System.out.println(savedUser.getTemporaryPassword());
         }).start();
 
         return mapUser(savedUser, List.of("email", "first_name", "last_name", "role", "password"));
