@@ -6,6 +6,7 @@ import com.javacadets.rohan.constants.RohanRoles;
 import com.javacadets.rohan.constants.RohanStatus;
 import com.javacadets.rohan.email.EmailDetails;
 import com.javacadets.rohan.email.EmailService;
+import com.javacadets.rohan.entities.Admin;
 import com.javacadets.rohan.entities.SME;
 import com.javacadets.rohan.entities.Student;
 import com.javacadets.rohan.entities.User;
@@ -101,6 +102,7 @@ public class UserService {
     public static List<Map<String, Object>> mapUsers(List<? extends User> users, List<String> keys) {
         List<Map<String, Object>> mUsers = new ArrayList<>();
         for (User user: users) {
+            if (user instanceof Admin) continue;
             mUsers.add(mapUser(user, keys));
         }
         return mUsers;
@@ -108,6 +110,9 @@ public class UserService {
 
     public static Map<String, Object> mapUser(User user, List<String> keys) {
         Map<String, Object> mUser = new LinkedHashMap<>();
+        if (user instanceof Admin) {
+            return mUser;
+        }
         if (keys.contains("email")) {
             mUser.put("email", user.getEmail());
         }

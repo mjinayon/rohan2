@@ -1,5 +1,6 @@
 package com.javacadets.rohan.controllers;
 
+import com.javacadets.rohan.helpers.ErrorHandler;
 import com.javacadets.rohan.services.ClassGradeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class RetrieveClassGradeSheet {
         try {
             return new ResponseEntity<>(this.classGradeService.getClassGradeSheet(code, batch), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
     @GetMapping(value = "/students/{code}/classes/{batch}/my-grades")
@@ -26,7 +27,7 @@ public class RetrieveClassGradeSheet {
         try {
             return new ResponseEntity<>(this.classGradeService.getStudentClassGradeSheet(code, batch), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
 }

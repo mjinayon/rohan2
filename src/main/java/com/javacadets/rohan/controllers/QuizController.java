@@ -1,5 +1,6 @@
 package com.javacadets.rohan.controllers;
 
+import com.javacadets.rohan.helpers.ErrorHandler;
 import com.javacadets.rohan.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class QuizController {
         try {
             return new ResponseEntity<>(this.quizService.saveQuiz(request), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Unable to add quiz: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -31,7 +32,7 @@ public class QuizController {
         try {
             return new ResponseEntity<>(this.quizService.deleteQuiz(quizId), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(String.format("Unable to delete quiz id '%d': %s", quizId, e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.javacadets.rohan.controllers;
 
+import com.javacadets.rohan.helpers.ErrorHandler;
 import com.javacadets.rohan.security.JwtGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -28,9 +32,12 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(request.get("email"),request.get("password")));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = this.jwtGenerator.generateToken(authentication);
-            return new ResponseEntity<>("Authorization: Bearer " + token, HttpStatus.OK);
+            Map<String, Object> mToken = new HashMap<>();
+            mToken.put("jwtToken", token);
+            mToken.put("Logged in", authentication.getName());
+            return new ResponseEntity<>(mToken, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(String.format("Unable to login user: %s", e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
 }

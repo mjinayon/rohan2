@@ -3,10 +3,8 @@ package com.javacadets.rohan.services;
 import com.javacadets.rohan.constants.RohanStatus;
 import com.javacadets.rohan.entities.Classs;
 import com.javacadets.rohan.entities.Student;
+import com.javacadets.rohan.exceptions.*;
 import com.javacadets.rohan.exceptions.ClassNotFoundException;
-import com.javacadets.rohan.exceptions.CourseNotFoundException;
-import com.javacadets.rohan.exceptions.DeactivateClassException;
-import com.javacadets.rohan.exceptions.OngoingClassException;
 import com.javacadets.rohan.repositories.ClassRepository;
 import com.javacadets.rohan.repositories.CourseRepository;
 import com.javacadets.rohan.repositories.StudentRepository;
@@ -26,15 +24,18 @@ public class CourseClassService {
     @Autowired
     private CourseRepository courseRepository;
 
-    public Map<String, Object> enrollOrUnenroll(Map<String, Object> request,String code,int batch,boolean enroll) throws ClassNotFoundException {
+    public Map<String, Object> enrollOrUnenroll(Map<String, Object> request,String code,int batch,boolean enroll) throws ClassNotFoundException, StudentAlreadyEnrolledException {
 
 
         Student student = this.studentsRepository.findByEmail((String)request.get("email")).orElse(null);
         Classs classs = this.classRepository.findByBatchAndCourseCode(batch,code).orElseThrow(()->new ClassNotFoundException(code,batch));
 
-        System.out.println(request.get("email"));
         if(student.getStatus().equals(RohanStatus.DEACTIVATED)) {
             throw new ClassNotFoundException(code,batch);
+        }
+
+        if (student.getClasses().stream().anyMatch(c ->c.getCourse().getCode().equals(code))) {
+            throw new StudentAlreadyEnrolledException(classs);
         }
 
         if(enroll && !classs.getStudents().add(student)) {

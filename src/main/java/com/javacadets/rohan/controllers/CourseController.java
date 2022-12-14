@@ -1,5 +1,6 @@
 package com.javacadets.rohan.controllers;
 
+import com.javacadets.rohan.helpers.ErrorHandler;
 import com.javacadets.rohan.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class CourseController {
         try {
             return new ResponseEntity<>(this.courseService.saveCourse(request), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(String.format("Unable to create course: %s",  e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -27,7 +28,7 @@ public class CourseController {
         try {
             return new ResponseEntity<>(this.courseService.updateCourseStatus(code), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(String.format("Unable to create course: %s",  e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -36,7 +37,7 @@ public class CourseController {
         try {
             return new ResponseEntity<>(this.courseService.getCourses(page, size), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(String.format("Unable to fetch courses: %s", e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -45,7 +46,7 @@ public class CourseController {
         try {
             return new ResponseEntity<>(this.courseService.getCoursesByKey(key, page, size), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(String.format("Unable to search a course: %s", e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -54,7 +55,7 @@ public class CourseController {
         try {
             return new ResponseEntity<>(this.courseService.getCourse(code), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(String.format("Unable to find course: %s", e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
 }

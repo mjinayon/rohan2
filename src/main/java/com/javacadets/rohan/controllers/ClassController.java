@@ -1,5 +1,6 @@
 package com.javacadets.rohan.controllers;
 
+import com.javacadets.rohan.helpers.ErrorHandler;
 import com.javacadets.rohan.services.ClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -19,8 +21,7 @@ public class ClassController {
         try {
             return new ResponseEntity<>(this.classService.saveClass(request), HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(String.format("Unable to create class: %s", e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
     @GetMapping(value = "/classes")
@@ -28,8 +29,7 @@ public class ClassController {
         try {
             return new ResponseEntity<>(this.classService.getClasses(page, size), HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(String.format("Unable to fetch classes: %s", e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -38,7 +38,7 @@ public class ClassController {
         try {
             return new ResponseEntity<>(this.classService.getClassesByKey(key, page, size), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(String.format("Unable to search a classes: %s", e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -47,7 +47,7 @@ public class ClassController {
         try {
             return new ResponseEntity<>(this.classService.getClass(code,batch), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(String.format("Unable to find class: %s", e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
 }

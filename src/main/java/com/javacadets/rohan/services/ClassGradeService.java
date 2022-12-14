@@ -23,7 +23,15 @@ public class ClassGradeService {
     private StudentRepository studentRepository;
 
     public Map<String, Object> getClassGradeSheet(String code, int batch) throws ClassNotFoundException {
+//        double maxTotalQuizScore=0.0;
+//        double maxTotalExerciseScore=0.0;
+//        double TotalQuizScore=0.0;
+//        double TotalExerciseScore=0.0;
+//        double maxTotalProjectScore=0.0;
+//        double TotalProjectScore=0.0;
+
         Classs classs = this.classRepository.findActiveClass(code, batch).orElseThrow(() -> new ClassNotFoundException(code, batch));
+
         List<Student> students = classs.getStudents().stream().toList();
         Map<String, Object> studentsRecord = new LinkedHashMap<>();
         for(Student student: students) {
@@ -31,18 +39,30 @@ public class ClassGradeService {
             Map<String, Object> mQuizRecord = new LinkedHashMap<>();
             for (QuizRecord quizRecord: student.getQuizRecords()) {
                 mQuizRecord.put(quizRecord.getQuiz().getTitle(), quizRecord.getScore());
+//                maxTotalQuizScore = maxTotalQuizScore + quizRecord.getQuiz().getMaxScore();
+//                TotalQuizScore = TotalQuizScore + quizRecord.getScore();
             }
             Map<String, Object> mExerciseRecord = new LinkedHashMap<>();
             for (ExerciseRecord exerciseRecord: student.getExerciseRecords()) {
                 mExerciseRecord.put(exerciseRecord.getExercise().getTitle(), exerciseRecord.getScore());
+//                maxTotalExerciseScore = maxTotalExerciseScore + exerciseRecord.getExercise().getMaxScore();
+//                TotalExerciseScore = TotalExerciseScore + exerciseRecord.getScore();
             }
             Map<String, Object> mProjectRecord = new LinkedHashMap<>();
             for (ProjectRecord projectRecord: student.getProjectRecords()) {
                 mProjectRecord.put(projectRecord.getProject().getProjectId()+"", projectRecord.getScore());
+     //           maxTotalProjectScore = projectRecord.getProject().getMaxScore();
+     //           TotalProjectScore = projectRecord.getScore();
             }
+
+//            double quizGrade =  ((TotalQuizScore/maxTotalQuizScore) * classs.getQuizPercentage()/100)*100;
+//            double ExerciseGrade = ((TotalExerciseScore/maxTotalExerciseScore) * classs.getExercisePercentage()/100)*100;
+//            double projectGrade = ((TotalProjectScore/maxTotalProjectScore) * classs.getProjectPercentage()/100)*100;
+
             record.put("quizzes", mQuizRecord);
             record.put("exercises", mExerciseRecord);
             record.put("project", mProjectRecord);
+          //  record.put("Tentative Grade",quizGrade+ExerciseGrade+projectGrade+classs.getAttendancePercentage());
             studentsRecord.put(student.getEmail(), record);
         }
         return studentsRecord;

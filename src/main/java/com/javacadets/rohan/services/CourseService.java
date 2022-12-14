@@ -3,6 +3,7 @@ package com.javacadets.rohan.services;
 import com.javacadets.rohan.constants.RohanStatus;
 import com.javacadets.rohan.entities.Course;
 import com.javacadets.rohan.exceptions.CourseNotFoundException;
+import com.javacadets.rohan.exceptions.DeactivatedCourseException;
 import com.javacadets.rohan.exceptions.InvalidRequestBodyException;
 import com.javacadets.rohan.repositories.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,12 @@ public class CourseService {
         return mapCourse(course, List.of("id", "code", "title", "description"));
     }
 
-    public Map<String, Object> updateCourseStatus(String code) throws CourseNotFoundException {
+    public Map<String, Object> updateCourseStatus(String code) throws CourseNotFoundException, DeactivatedCourseException {
         Course course = this.courseRepository.findByCode(code).orElseThrow(() -> new CourseNotFoundException(code));
+
+        if(course.getStatus().equals(RohanStatus.DEACTIVATED)) {
+            throw new DeactivatedCourseException(course);
+        }
         course.setStatus(RohanStatus.DEACTIVATED);
         return mapCourse(this.courseRepository.save(course), List.of("id", "code", "title", "description", "status"));
     }

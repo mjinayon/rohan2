@@ -1,5 +1,6 @@
 package com.javacadets.rohan.controllers;
 
+import com.javacadets.rohan.helpers.ErrorHandler;
 import com.javacadets.rohan.services.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class ExerciseController {
         try {
             return new ResponseEntity<>(this.exerciseService.saveExercise(request), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Unable to add exercise "+ e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -32,7 +33,7 @@ public class ExerciseController {
         try {
             return new ResponseEntity<>(this.exerciseService.deleteExercise(quizId), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(String.format("Unable to delete exercise id '%d': %s", quizId, e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
 }

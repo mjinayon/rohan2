@@ -1,5 +1,6 @@
 package com.javacadets.rohan.controllers;
 
+import com.javacadets.rohan.helpers.ErrorHandler;
 import com.javacadets.rohan.repositories.ProjectRecordRepository;
 import com.javacadets.rohan.repositories.ProjectRepository;
 import com.javacadets.rohan.services.ProjectRecordService;
@@ -21,7 +22,7 @@ public class ProjectRecordController {
         try {
             return new ResponseEntity<>(this.projectRecordService.saveProjectRecord(code,batch, email, score), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(String.format("Unable to add record: %s", e.getMessage()), HttpStatus.OK);
+            return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
     }
 }

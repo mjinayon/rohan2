@@ -1,6 +1,7 @@
 package com.javacadets.rohan.security;
 
 import com.javacadets.rohan.constants.RohanRoles;
+import com.javacadets.rohan.constants.RohanStatus;
 import com.javacadets.rohan.entities.Admin;
 import com.javacadets.rohan.entities.User;
 import com.javacadets.rohan.entities.SME;
@@ -31,6 +32,10 @@ public class CustomUserDetailsService implements UserDetailsService {
             role = RohanRoles.SME;
         } else if (user instanceof Student) {
             role = RohanRoles.STUDENT;
+        }
+
+        if ((role.equals(RohanRoles.SME) || role.equals(RohanRoles.STUDENT)) && user.getStatus().equals(RohanStatus.DEACTIVATED)) {
+            throw new UserNotFoundException(email);
         }
         return new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(), List.of(new SimpleGrantedAuthority(role)));
     }

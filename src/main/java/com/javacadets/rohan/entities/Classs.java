@@ -117,5 +117,15 @@ public class Classs {
         return quizzes;
     }
 
+    public Set<AttendanceRecord> getAttendanceRecords() {
+        return attendanceRecords;
+    }
 
+    public Set<Exercise> getExercises() {
+        return exercises;
+    }
+
+    public Project getProject() {
+        return project;
+    }
 }
