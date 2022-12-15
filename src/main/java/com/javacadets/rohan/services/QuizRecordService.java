@@ -23,10 +23,11 @@ public class QuizRecordService {
     @Autowired
     private QuizRepository quizRepository;
 
-    public Map<String, Object> saveQuizRecord(long quizId, String email, int score) throws QuizNotFoundException, InvalidScoreRangeException, StudentNotEnrolledException {
+    public Map<String, Object> saveQuizRecord(Map<String,Object> request,long quizId, String email) throws QuizNotFoundException, InvalidScoreRangeException, StudentNotEnrolledException {
         Student student = this.studentRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
         Quiz quiz = this.quizRepository.findById(quizId).orElseThrow(() -> new QuizNotFoundException(quizId));
-
+        int score = (int) request.get("score");
+        System.out.println(score);
         if (!quiz.getClasss().getStudents().contains(student)) {
             throw new StudentNotEnrolledException(student);
         }
@@ -43,7 +44,7 @@ public class QuizRecordService {
 
     public static Map<String, Object> mapQuizRecord(QuizRecord quizRecord) {
         Map<String, Object> mQuizRecord = new LinkedHashMap<>();
-        mQuizRecord.put("quiz", quizRecord.getQuiz().getQuizId());
+        mQuizRecord.put("quiz_id", quizRecord.getQuiz().getQuizId());
         mQuizRecord.put("email", quizRecord.getStudent().getEmail());
         mQuizRecord.put("score", quizRecord.getScore());
         return mQuizRecord;

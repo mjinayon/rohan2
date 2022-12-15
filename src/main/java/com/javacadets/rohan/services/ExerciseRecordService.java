@@ -20,9 +20,11 @@ public class ExerciseRecordService {
     @Autowired
     private ExerciseRepository exerciseRepository;
 
-    public Map<String, Object> saveExerciseRecord(long exerciseId, String email, int score) throws ExerciseNotFoundException, InvalidScoreRangeException, StudentNotEnrolledException {
+    public Map<String, Object> saveExerciseRecord(Map<String, Object> request,long exerciseId, String email) throws ExerciseNotFoundException, InvalidScoreRangeException, StudentNotEnrolledException {
         Student student = this.studentRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
         Exercise exercise = this.exerciseRepository.findById(exerciseId).orElseThrow(() -> new ExerciseNotFoundException(exerciseId));
+
+        int score = (int) request.get("score");
 
         if (!exercise.getClasss().getStudents().contains(student)) {
             throw new StudentNotEnrolledException(student);
@@ -31,7 +33,7 @@ public class ExerciseRecordService {
         if (exercise.isDeleted()) {
             throw  new ExerciseNotFoundException(exerciseId);
         }
-        if (!(score > exercise.getMinScore()) || !(score < exercise.getMaxScore())) {
+        if (!(score> exercise.getMinScore()) || !(score < exercise.getMaxScore())) {
             throw new InvalidScoreRangeException(exercise.getMinScore(), exercise.getMaxScore(), score);
         }
         ExerciseRecord exerciseRecord = this.exerciseRecordRepository.save(new ExerciseRecord(student, exercise, score));
@@ -40,7 +42,7 @@ public class ExerciseRecordService {
 
     public static Map<String, Object> mapExerciseRecord(ExerciseRecord exerciseRecord) {
         Map<String, Object> mExerciseRecord = new LinkedHashMap<>();
-        mExerciseRecord.put("exercise", exerciseRecord.getExercise().getExerciseId());
+        mExerciseRecord.put("exercise_id", exerciseRecord.getExercise().getExerciseId());
         mExerciseRecord.put("email", exerciseRecord.getStudent().getEmail());
         mExerciseRecord.put("score", exerciseRecord.getScore());
         return mExerciseRecord;

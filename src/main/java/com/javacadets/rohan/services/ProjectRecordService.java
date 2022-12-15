@@ -25,10 +25,11 @@ public class ProjectRecordService {
     @Autowired
     private ClassRepository classRepository;
 
-    public Map<String, Object> saveProjectRecord(String code, int batch, String email, int score) throws ProjectNotFoundException, ClassNotFoundException, StudentNotEnrolledException {
+    public Map<String, Object> saveProjectRecord(Map<String,Object> request, String code, int batch, String email) throws ProjectNotFoundException, ClassNotFoundException, StudentNotEnrolledException {
         Student student = this.studentRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
         Classs classs = this.classRepository.findByBatchAndCourseCode(batch,code).orElseThrow(()->new ClassNotFoundException(code,batch));
         Project project = this.projectRepository.findByClasss(classs).orElse(null);
+        int score = (int)request.get("score");
         if (!project.getClasss().getStudents().contains(student)) {
             throw new StudentNotEnrolledException(student);
         }

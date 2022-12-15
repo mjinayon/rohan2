@@ -9,7 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 public class ProjectRecordController {
@@ -17,10 +20,10 @@ public class ProjectRecordController {
     @Autowired
     private ProjectRecordService projectRecordService;
 
-    @PostMapping(value = "/courses/{code}/classes/{batch}/projects/{email}/{score}")
-    public ResponseEntity<Object> addProjectRecord(@PathVariable String code,@PathVariable int batch, @PathVariable String email, @PathVariable int score) {
+    @PostMapping(value = "/courses/{code}/classes/{batch}/projects/{email}")
+    public ResponseEntity<Object> addProjectRecord(@RequestBody Map<String, Object> request, @PathVariable String code, @PathVariable int batch, @PathVariable String email) {
         try {
-            return new ResponseEntity<>(this.projectRecordService.saveProjectRecord(code,batch, email, score), HttpStatus.OK);
+            return new ResponseEntity<>(this.projectRecordService.saveProjectRecord(request,code,batch, email), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(ErrorHandler.err(e), HttpStatus.BAD_REQUEST);
         }
