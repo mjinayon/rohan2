@@ -46,7 +46,7 @@ public class ClassGradeService {
     public static Map<String, Object> mapStudentRecord(Student student) {
         Map<String, Object> record = new LinkedHashMap<>();
         List<Map<String, Object>> mQuizRecord = new ArrayList<>();
-        for (QuizRecord quizRecord : student.getQuizRecords()) {\
+        for (QuizRecord quizRecord : student.getQuizRecords()) {
             Map<String, Object> obj = new LinkedHashMap<>();
             obj.put("id", quizRecord.getQuiz().getQuizId());
             obj.put("title", quizRecord.getQuiz().getTitle());
