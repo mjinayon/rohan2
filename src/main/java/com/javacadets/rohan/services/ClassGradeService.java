@@ -72,26 +72,34 @@ public class ClassGradeService {
 
 
         Map<String, Object> record = new LinkedHashMap<>();
-        List<Integer> mQuizRecord = new ArrayList<>();
-        for (QuizRecord quizRecord : student.getQuizRecords()) {
-            mQuizRecord.add(quizRecord.getScore());
-
+        List<Map<String, Object>> mQuizRecord = new ArrayList<>();
+        for (QuizRecord quizRecord : student.getQuizRecords()) {\
+            Map<String, Object> obj = new LinkedHashMap<>();
+            obj.put("id", quizRecord.getQuiz().getQuizId());
+            obj.put("title", quizRecord.getQuiz().getTitle());
+            obj.put("score", quizRecord.getScore());
+            mQuizRecord.add(obj);
         }
-        List<Integer> mExerciseRecord = new ArrayList<>();
+        List<Map<String, Object>> mExerciseRecord = new ArrayList<>();
         for (ExerciseRecord exerciseRecord : student.getExerciseRecords()) {
-            mExerciseRecord.add(exerciseRecord.getScore());
-
+            Map<String, Object> obj = new LinkedHashMap<>();
+            obj.put("id", exerciseRecord.getExercise().getExerciseId());
+            obj.put("title", exerciseRecord.getExercise().getTitle());
+            obj.put("score", exerciseRecord.getScore());
+            mExerciseRecord.add(obj);
         }
-        List<Integer> mProjectRecord = new ArrayList<>();
+        List<Map<String, Object>> mProjectRecord = new ArrayList<>();
         for (ProjectRecord projectRecord : student.getProjectRecords()) {
-
-            mProjectRecord.add(projectRecord.getScore());
+            Map<String, Object> obj = new LinkedHashMap<>();
+            obj.put("id", projectRecord.getProject().getProjectId());
+            obj.put("score", projectRecord.getScore());
+            mProjectRecord.add(obj);
         }
+
         record.put("email", student.getEmail());
         record.put("quizzes", mQuizRecord);
         record.put("exercises", mExerciseRecord);
         record.put("project", mProjectRecord);
-
 
         return record;
     }
