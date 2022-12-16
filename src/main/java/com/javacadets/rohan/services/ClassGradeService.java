@@ -29,38 +29,8 @@ public class ClassGradeService {
 
         List<Student> students = classs.getStudents().stream().toList();
         List<Map<String, Object>> studentsRecord = new ArrayList<>();
-
         for(Student student: students) {
-            Map<String, Object> record = new LinkedHashMap<>();
-            List<Map<String, Object>> mQuizRecord = new ArrayList<>();
-            for (QuizRecord quizRecord: student.getQuizRecords()) {
-                Map<String, Object> obj = new LinkedHashMap<>();
-                obj.put("id", quizRecord.getQuiz().getQuizId());
-                obj.put("title", quizRecord.getQuiz().getTitle());
-                obj.put("score", quizRecord.getScore());
-                mQuizRecord.add(obj);
-            }
-            List<Map<String, Object>> mExerciseRecord = new ArrayList<>();
-            for (ExerciseRecord exerciseRecord: student.getExerciseRecords()) {
-                Map<String, Object> obj = new LinkedHashMap<>();
-                obj.put("id", exerciseRecord.getExercise().getExerciseId());
-                obj.put("title", exerciseRecord.getExercise().getTitle());
-                obj.put("score", exerciseRecord.getScore());
-                mExerciseRecord.add(obj);
-            }
-            List<Map<String, Object>> mProjectRecord = new ArrayList<>();
-            for (ProjectRecord projectRecord: student.getProjectRecords()) {
-                Map<String, Object> obj = new LinkedHashMap<>();
-                obj.put("id", projectRecord.getProject().getProjectId());
-                obj.put("score", projectRecord.getScore());
-                mProjectRecord.add(obj);
-            }
-            record.put("email", student.getEmail());
-            record.put("quizzes", mQuizRecord);
-            record.put("exercises", mExerciseRecord);
-            record.put("project", mProjectRecord);
-
-            studentsRecord.add(record);
+            studentsRecord.add(mapStudentRecord(student));
         }
         return studentsRecord;
     }
@@ -70,7 +40,10 @@ public class ClassGradeService {
         Classs classs = this.classRepository.findActiveClass(code, batch).orElseThrow(() -> new ClassNotFoundException(code, batch));
         Student student = this.studentRepository.findByEmail(auth.getName()).orElseThrow(() -> new UserNotFoundException(auth.getName()));
 
+        return mapStudentRecord(student);
+    }
 
+    public static Map<String, Object> mapStudentRecord(Student student) {
         Map<String, Object> record = new LinkedHashMap<>();
         List<Map<String, Object>> mQuizRecord = new ArrayList<>();
         for (QuizRecord quizRecord : student.getQuizRecords()) {\
