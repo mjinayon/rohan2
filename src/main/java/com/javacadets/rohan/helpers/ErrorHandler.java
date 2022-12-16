@@ -9,7 +9,9 @@ import java.util.Map;
 public class ErrorHandler {
     public static Map<String, Object> err (Exception e) {
         Map<String, Object> error = new LinkedHashMap<>();
+
         error.put("code", HttpStatus.BAD_REQUEST.value());
+        error.put("exception", e.getClass());
         error.put("message", e.getMessage());
 
         Map<String, Object> returnError = new HashMap<>();
