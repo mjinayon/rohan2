@@ -79,6 +79,7 @@ public class ClassGradeService {
 
             mProjectRecord.add(projectRecord.getScore());
         }
+        record.put("email", student.getEmail());
         record.put("quizzes", mQuizRecord);
         record.put("exercises", mExerciseRecord);
         record.put("project", mProjectRecord);
