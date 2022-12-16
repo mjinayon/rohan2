@@ -23,12 +23,13 @@ public class ClassGradeService {
     @Autowired
     private StudentRepository studentRepository;
 
-    public Map<String, Object> getClassGradeSheet(String code, int batch) throws ClassNotFoundException {
+    public List<Map<String, Object>> getClassGradeSheet(String code, int batch) throws ClassNotFoundException {
 
         Classs classs = this.classRepository.findActiveClass(code, batch).orElseThrow(() -> new ClassNotFoundException(code, batch));
 
         List<Student> students = classs.getStudents().stream().toList();
-        Map<String, Object> s = new LinkedHashMap<>();
+        List<Map<String, Object>> studentsRecord = new ArrayList<>();
+
         for(Student student: students) {
             Map<String, Object> record = new LinkedHashMap<>();
             List<Integer> mQuizRecord = new ArrayList<>();
@@ -46,15 +47,14 @@ public class ClassGradeService {
 
                 mProjectRecord.add(projectRecord.getScore());
             }
+            record.put("email", student.getEmail());
             record.put("quizzes", mQuizRecord);
             record.put("exercises", mExerciseRecord);
             record.put("project", mProjectRecord);
 
-            s.put(student.getEmail(),record);
+            studentsRecord.add(record);
         }
-        Map <String, Object> stud = new LinkedHashMap<>();
-        stud.put("students",s);
-        return stud;
+        return studentsRecord;
     }
 
     public Map<String, Object> getStudentClassGradeSheet(String code, int batch) throws ClassNotFoundException {
