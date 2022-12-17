@@ -8,7 +8,6 @@ import com.javacadets.rohan.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,9 +23,7 @@ public class ClassGradeService {
     private StudentRepository studentRepository;
 
     public List<Map<String, Object>> getClassGradeSheet(String code, int batch) throws ClassNotFoundException {
-
         Classs classs = this.classRepository.findActiveClass(code, batch).orElseThrow(() -> new ClassNotFoundException(code, batch));
-
         List<Student> students = classs.getStudents().stream().toList();
         List<Map<String, Object>> studentsRecord = new ArrayList<>();
         for(Student student: students) {
@@ -37,9 +34,7 @@ public class ClassGradeService {
 
     public Map<String, Object> getStudentClassGradeSheet(String code, int batch) throws ClassNotFoundException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Classs classs = this.classRepository.findActiveClass(code, batch).orElseThrow(() -> new ClassNotFoundException(code, batch));
         Student student = this.studentRepository.findByEmail(auth.getName()).orElseThrow(() -> new UserNotFoundException(auth.getName()));
-
         return mapStudentRecord(student);
     }
 
